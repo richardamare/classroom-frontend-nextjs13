@@ -14,7 +14,7 @@ export default function Sidebar({className}: SidebarProps) {
 	const router = useRouter();
 
 	function isActive(path: string) {
-		return router.pathname.includes(path)
+		return router.pathname === path
 	}
 
 	return (

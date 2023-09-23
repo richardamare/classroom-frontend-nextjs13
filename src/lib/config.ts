@@ -2,7 +2,7 @@ import {BookOpen, ClipboardList, GraduationCap, LucideLayoutDashboard, Presentat
 
 const dashboardItem = {
 	label: "Přehled",
-	href: "/dashboard",
+	href: "/dashboard/overview",
 	icon: LucideLayoutDashboard,
 }
 

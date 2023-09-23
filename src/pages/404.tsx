@@ -9,7 +9,7 @@ export default function Page() {
 				<h1 className="text-6xl font-bold">404</h1>
 				<p className="text-2xl">PAGE NOT FOUND</p>
 				<Link
-					href="/dashboard"
+					href="/dashboard/overview"
 					className={buttonVariants({variant: "outline"})}
 				>
 					<ArrowRight className="mr-2 h-4 w-4"/>
