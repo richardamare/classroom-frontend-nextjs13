@@ -1,31 +1,31 @@
 import {BookOpen, ClipboardList, GraduationCap, LucideLayoutDashboard, Presentation} from "lucide-react";
 
 const dashboardItem = {
-	label: "Dashboard",
+	label: "Přehled",
 	href: "/dashboard",
 	icon: LucideLayoutDashboard,
 }
 
 const gradesItem = {
-	label: "Grades",
+	label: "Známky",
 	href: "/dashboard/grades",
 	icon: ClipboardList,
 }
 
 const coursesItem = {
-	label: "Courses",
+	label: "Kurzy",
 	href: "/dashboard/courses",
 	icon: BookOpen,
 }
 
 const classesItem = {
-	label: "Classes",
+	label: "Třídy/Skupiny",
 	href: "/dashboard/classes",
 	icon: ClipboardList,
 }
 
 const studentsItem = {
-	label: "Students",
+	label: "Studenti",
 	href: "/dashboard/students",
 	icon: GraduationCap,
 }
@@ -35,7 +35,7 @@ export const sidebarItems = {
 		dashboardItem,
 		studentsItem,
 		{
-			label: "Teachers",
+			label: "Učitelé",
 			href: "/dashboard/teachers",
 			icon: Presentation,
 		},
