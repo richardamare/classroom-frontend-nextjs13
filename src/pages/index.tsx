@@ -5,17 +5,20 @@ import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {useState} from "react";
 import {Icons} from "@/components/ui/icons";
+import {useRouter} from "next/router";
 
 export default function Page() {
 
 	const [isLoading, setIsLoading] = useState(false)
+	const router = useRouter();
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault()
 		setIsLoading(true)
 		setTimeout(() => {
 			setIsLoading(false)
-		}, 2000)
+			router.push('/dashboard').catch(console.error)
+		}, 1000)
 	}
 
 	return <div className="bg-gray-50 min-h-screen w-screen justify-center flex flex-col">
