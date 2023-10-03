@@ -21,7 +21,7 @@ export default function Page() {
 		}, 1000)
 	}
 
-	return <div className="bg-gray-50 min-h-screen w-screen justify-center flex flex-col">
+	return <div className="bg-gray-50 min-h-screen w-screen justify-center flex flex-col dark:bg-gray-900">
 		<Card className="max-w-lg w-full mx-auto">
 			<CardHeader>
 				<CardTitle className="text-xl">

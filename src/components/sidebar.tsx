@@ -19,7 +19,7 @@ export default function Sidebar({className}: SidebarProps) {
 
 	return (
 		<div className={className}>
-			<div className="space-y-4 py-4 flex flex-col justify-between h-full">
+			<div className="space-y-4 flex flex-col justify-between min-h-screen h-full">
 				<div className="py-2 space-y-6">
 					<div className="flex items-center justify-center h-20">
 						<h1>LOGO</h1>
@@ -29,7 +29,7 @@ export default function Sidebar({className}: SidebarProps) {
 							<>
 								<Link href={item.href}
 								      className={cn(
-									      "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 hover:text-slate-600 hover:bg-slate-300/20 w-full",
+									      "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 hover:text-secondary-foreground hover:bg-slate-300/20 w-full",
 									      isActive(item.href) && "text-secondary-foreground bg-secondary/20"
 								      )}>
 									<div className="flex items-center gap-x-2 py-4">
@@ -42,7 +42,7 @@ export default function Sidebar({className}: SidebarProps) {
 					</div>
 				</div>
 				<div className="border-t">
-					<div className="px-4 py-2 space-y-6">
+					<div className="px-4 pt-2 pb-4 space-y-6 bg-red-100">
 						<Link
 							href="/auth/logout"
 							className={cn(
