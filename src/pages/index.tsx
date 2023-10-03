@@ -17,7 +17,7 @@ export default function Page() {
 		setIsLoading(true)
 		setTimeout(() => {
 			setIsLoading(false)
-			router.push('/dashboard').catch(console.error)
+			router.push('/dashboard/overview').catch(console.error)
 		}, 1000)
 	}
 
