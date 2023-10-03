@@ -1,9 +1,9 @@
-import {Button, buttonVariants} from "@/components/ui/button";
 import {useRouter} from "next/router";
-import {sidebarItems} from "@/lib/config";
 import Link from "next/link";
-import {LogOut} from "lucide-react";
 import {cn} from "@/lib/utils";
+import {buttonVariants} from "@/components/ui/button";
+import {LogOut} from "lucide-react";
+import {sidebarItems} from "@/lib/config";
 
 interface SidebarProps {
 	className?: string;
@@ -20,22 +20,23 @@ export default function Sidebar({className}: SidebarProps) {
 	return (
 		<div className={className}>
 			<div className="space-y-4 py-4 flex flex-col justify-between h-full">
-				<div className="px-4 py-2 space-y-6">
+				<div className="py-2 space-y-6">
 					<div className="flex items-center justify-center h-20">
 						<h1>LOGO</h1>
 					</div>
-					<div className="space-y-2 mt-20">
+					<div className="mt-20">
 						{sidebarItems.office.map((item) => (
 							<>
-								<Button
-									variant={isActive(item.href) ? "secondary" : "ghost"}
-									size="default"
-									className="w-full justify-start"
-									onClick={() => router.push(item.href)}
-								>
-									<item.icon className="mr-2 w-4 h-4"/>
-									{item.label}
-								</Button>
+								<Link href={item.href}
+								      className={cn(
+									      "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 hover:text-slate-600 hover:bg-slate-300/20 w-full",
+									      isActive(item.href) && "text-secondary-foreground bg-secondary/20"
+								      )}>
+									<div className="flex items-center gap-x-2 py-4">
+										<item.icon className="w-5 h-5 mr-2"/>
+										<span>{item.label}</span>
+									</div>
+								</Link>
 							</>
 						))}
 					</div>
