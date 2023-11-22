@@ -31,7 +31,7 @@ export default function Sidebar({className}: SidebarProps) {
 									<Link href={item.href}
 									      className={cn(
 										      "flex items-center gap-x-2 text-muted-foreground text-sm font-[500] pl-6 hover:text-secondary-foreground hover:bg-slate-300/20 w-full",
-										      isActive(item.href) && "text-accent-foreground bg-secondary/20"
+										      isActive(item.href) && "text-blue-500 bg-blue-100/80 dark:bg-blue-500/20 dark:text-blue-500"
 									      )}>
 										<div className="flex items-center gap-x-2 py-4">
 											<item.icon className="w-5 h-5 mr-2"/>

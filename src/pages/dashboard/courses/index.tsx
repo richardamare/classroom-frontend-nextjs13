@@ -1,4 +1,4 @@
-import DashboardLayout from "@/components/dashboard-layout";
+import DashboardLayout from "@/components/layouts/dashboard-layout";
 import {useApi} from "@/hooks/use-api";
 import {useQuery} from "@tanstack/react-query";
 import {Card} from "@/components/ui/card";
