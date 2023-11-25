@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 
 export function useQueryParam<T>(paramName: string, defaultValue: T) {
@@ -63,7 +63,12 @@ export function useQueryParam<T>(paramName: string, defaultValue: T) {
 
 export function useGetQueryParam<T>(name: string, defaultValue: T) {
 	const router = useRouter();
-	return router.query[name] as T | null || defaultValue;
+	return useMemo(() => {
+		if (router.query[name] === undefined) {
+			return defaultValue;
+		}
+		return router.query[name] as T;
+	}, [router.query[name]]);
 }
 
 export function useSetQueryParam<T>(name: string) {

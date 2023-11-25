@@ -7,11 +7,10 @@ import {
 	SelectTrigger,
 	SelectValue
 } from "@/components/ui/select";
-import {useQuery} from "react-query";
+import {useQuery, useQueryClient} from "react-query";
 import {useApi} from "@/hooks/use-api";
-import {useQueryParam} from "@/hooks/use-query-param";
+import {useGetQueryParam, useSetQueryParam} from "@/hooks/use-query-param";
 import {useToast} from "@/hooks/use-toast";
-import {useEffect} from "react";
 
 interface SemesterPickerProps {
 	className?: string;
@@ -19,10 +18,12 @@ interface SemesterPickerProps {
 
 export function SemesterPicker({className}: SemesterPickerProps) {
 
-	const [semesterId, setSemesterId] = useQueryParam("semester", "")
+	const semesterId = useGetQueryParam("semester", "")
+	const setSemesterId = useSetQueryParam<string>("semester");
 
 	const api = useApi();
 	const toast = useToast();
+	const queryClient = useQueryClient();
 
 	const semesterQuery = useQuery({
 		queryKey: ['semesters'],
@@ -40,14 +41,9 @@ export function SemesterPicker({className}: SemesterPickerProps) {
 
 	const onSemesterChange = (value: string) => {
 		setSemesterId(value);
-		toast.success(`Semester changed to ${value}`)
+		queryClient.invalidateQueries(["courses", "studentGroups"]).catch(console.error);
+		queryClient.resetQueries().catch(console.error);
 	}
-
-	useEffect(() => {
-		if (semesterId === "" && semesters.length > 0) {
-			setSemesterId(semesters[0]?.id ?? "");
-		}
-	}, [semesterId, semesters]);
 
 	return (
 		<Select onValueChange={onSemesterChange} value={semesterId}>

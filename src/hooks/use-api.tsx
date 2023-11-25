@@ -22,7 +22,6 @@ export function useApi() {
 			defaultOptions: {
 				queries: {
 					enabled: session.status === "authenticated",
-					retry: false,
 					refetchOnMount: false,
 					refetchOnWindowFocus: false,
 					refetchOnReconnect: false,
