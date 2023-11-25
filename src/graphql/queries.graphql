@@ -93,3 +93,22 @@ query getStudent($id: String!) {
         fullName
     }
 }
+
+query getStudentGroup($id: String!) {
+    getStudentGroup(id: $id) {
+        id
+        name
+        teacher {
+            id
+            fullName
+        }
+        type
+        students {
+            id
+            firstName
+            lastName
+            email
+            fullName
+        }
+    }
+}

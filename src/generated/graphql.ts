@@ -310,6 +310,8 @@ export type Query = {
   currentUser: User;
   /** Get the student by id */
   getStudent: Student;
+  /** Get a student group by id */
+  getStudentGroup: StudentGroup;
   /** Get the teacher by id */
   getTeacher: Teacher;
   /** List course grades */
@@ -330,6 +332,11 @@ export type Query = {
 
 
 export type QueryGetStudentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetStudentGroupArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -527,6 +534,13 @@ export type GetStudentQueryVariables = Exact<{
 
 export type GetStudentQuery = { __typename?: 'Query', getStudent: { __typename?: 'Student', id: string, firstName: string, lastName: string, email: string, fullName: string } };
 
+export type GetStudentGroupQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetStudentGroupQuery = { __typename?: 'Query', getStudentGroup: { __typename?: 'StudentGroup', id: string, name: string, type: StudentGroupType, teacher?: { __typename?: 'Teacher', id: string, fullName: string } | null, students: Array<{ __typename?: 'Student', id: string, firstName: string, lastName: string, email: string, fullName: string }> } };
+
 
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
@@ -655,6 +669,26 @@ export const GetStudentDocument = gql`
   }
 }
     `;
+export const GetStudentGroupDocument = gql`
+    query getStudentGroup($id: String!) {
+  getStudentGroup(id: $id) {
+    id
+    name
+    teacher {
+      id
+      fullName
+    }
+    type
+    students {
+      id
+      firstName
+      lastName
+      email
+      fullName
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -692,6 +726,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     getStudent(variables: GetStudentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetStudentQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetStudentQuery>(GetStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getStudent', 'query');
+    },
+    getStudentGroup(variables: GetStudentGroupQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetStudentGroupQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetStudentGroupQuery>(GetStudentGroupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getStudentGroup', 'query');
     }
   };
 }

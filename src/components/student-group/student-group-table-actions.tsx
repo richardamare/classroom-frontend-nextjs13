@@ -9,12 +9,20 @@ import {
 import {Button} from "@/components/ui/button";
 import {MoreHorizontal} from "lucide-react";
 import {api} from "@/lib/api";
+import {useRouter} from "next/router";
 
 interface TeacherTableActionsProps {
 	studentGroup: Awaited<ReturnType<typeof api.listStudentGroups>>["listStudentGroups"][number];
 }
 
 export default function StudentGroupTableActions({studentGroup}: TeacherTableActionsProps) {
+
+	const router = useRouter();
+
+	const onView = () => {
+		router.push(`/dashboard/groups/${studentGroup.id}`).catch(console.error);
+	}
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -26,10 +34,7 @@ export default function StudentGroupTableActions({studentGroup}: TeacherTableAct
 			<DropdownMenuContent align="end">
 				<DropdownMenuLabel>Akce</DropdownMenuLabel>
 				<DropdownMenuSeparator/>
-				<DropdownMenuItem
-					onSelect={() => {
-					}}
-				>
+				<DropdownMenuItem onSelect={onView}>
 					Zobrazit
 				</DropdownMenuItem>
 				<DropdownMenuItem
