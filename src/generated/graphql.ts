@@ -520,6 +520,13 @@ export type GetTeacherQueryVariables = Exact<{
 
 export type GetTeacherQuery = { __typename?: 'Query', getTeacher: { __typename?: 'Teacher', id: string, firstName: string, lastName: string, email: string, fullName: string, courses: Array<{ __typename?: 'Course', id: string, name: string, description: string, studentGroup: { __typename?: 'StudentGroup', id: string, name: string } }> } };
 
+export type GetStudentQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetStudentQuery = { __typename?: 'Query', getStudent: { __typename?: 'Student', id: string, firstName: string, lastName: string, email: string, fullName: string } };
+
 
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
@@ -637,6 +644,17 @@ export const GetTeacherDocument = gql`
   }
 }
     `;
+export const GetStudentDocument = gql`
+    query getStudent($id: String!) {
+  getStudent(id: $id) {
+    id
+    firstName
+    lastName
+    email
+    fullName
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -671,6 +689,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     getTeacher(variables: GetTeacherQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTeacherQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetTeacherQuery>(GetTeacherDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTeacher', 'query');
+    },
+    getStudent(variables: GetStudentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetStudentQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetStudentQuery>(GetStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getStudent', 'query');
     }
   };
 }

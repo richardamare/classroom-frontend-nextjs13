@@ -83,3 +83,13 @@ query getTeacher($id: String!) {
         }
     }
 }
+
+query getStudent($id: String!) {
+    getStudent(id: $id) {
+        id
+        firstName
+        lastName
+        email
+        fullName
+    }
+}

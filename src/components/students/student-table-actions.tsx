@@ -9,12 +9,19 @@ import {
 import {Button} from "@/components/ui/button";
 import {MoreHorizontal} from "lucide-react";
 import {api} from "@/lib/api";
+import {useRouter} from "next/router";
 
 interface TeacherTableActionsProps {
 	student: Awaited<ReturnType<typeof api.listStudents>>["listStudents"][number];
 }
 
 export default function StudentTableActions({student}: TeacherTableActionsProps) {
+	const router = useRouter();
+
+	const onView = () => {
+		router.push(`/dashboard/students/${student.id}`).catch(console.error);
+	}
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -27,8 +34,7 @@ export default function StudentTableActions({student}: TeacherTableActionsProps)
 				<DropdownMenuLabel>Akce</DropdownMenuLabel>
 				<DropdownMenuSeparator/>
 				<DropdownMenuItem
-					onSelect={() => {
-					}}
+					onSelect={onView}
 				>
 					Zobrazit
 				</DropdownMenuItem>
