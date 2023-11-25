@@ -1,7 +1,7 @@
 import {type ColumnDef} from "@tanstack/react-table";
 import {TableColumnHeader} from "@/components/ui/table-column-header";
 import {api} from "@/lib/api";
-import StudentTableActions from "@/components/students/student-table-actions";
+import StudentGroupTableActions from "@/components/student-group/student-group-table-actions";
 
 
 type ColumnType = Awaited<ReturnType<typeof api.listStudentGroups>>["listStudentGroups"][number];
@@ -19,7 +19,7 @@ export const studentGroupTableColumns: ColumnDef<ColumnType>[] = [
 	},
 	{
 		id: "teacher",
-		accessorFn: (c) => c.teacher?.fullName,
+		accessorFn: (c) => c.teacher?.fullName ?? "–",
 		header: ({column}) => <TableColumnHeader column={column} title="Třídní učitel"/>,
 	},
 	{
@@ -28,7 +28,7 @@ export const studentGroupTableColumns: ColumnDef<ColumnType>[] = [
 			<TableColumnHeader column={column} title="Akce"/>
 		),
 		cell: ({row}) => {
-			return <StudentTableActions student={row.original}/>;
+			return <StudentGroupTableActions studentGroup={row.original}/>;
 		},
 	},
 ];
