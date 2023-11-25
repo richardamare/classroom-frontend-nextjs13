@@ -304,8 +304,14 @@ export type MutationLoginArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Get the current student */
+  currentStudent: Student;
   /** Get the current user */
   currentUser: User;
+  /** Get the student by id */
+  getStudent: Student;
+  /** Get the teacher by id */
+  getTeacher: Teacher;
   /** List course grades */
   listCourseGrades: Array<CourseGrade>;
   /** List all courses */
@@ -320,8 +326,16 @@ export type Query = {
   listStudents: Array<Student>;
   /** List all teachers */
   listTeachers: Array<Teacher>;
-  /** Get the student */
-  student: Student;
+};
+
+
+export type QueryGetStudentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetTeacherArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -424,12 +438,16 @@ export enum StudentGroupType {
 
 export type Teacher = {
   __typename?: 'Teacher';
+  /** The courses of where the teacher teaches */
+  courses: Array<Course>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
+  /** The student classes where the teacher is class teacher */
+  studentGroups: Array<StudentGroup>;
 };
 
 export type User = {
@@ -494,6 +512,13 @@ export type ListStudentGroupsQueryVariables = Exact<{
 
 
 export type ListStudentGroupsQuery = { __typename?: 'Query', listStudentGroups: Array<{ __typename?: 'StudentGroup', id: string, name: string, type: StudentGroupType, teacher?: { __typename?: 'Teacher', id: string, fullName: string } | null }> };
+
+export type GetTeacherQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetTeacherQuery = { __typename?: 'Query', getTeacher: { __typename?: 'Teacher', id: string, firstName: string, lastName: string, email: string, fullName: string, courses: Array<{ __typename?: 'Course', id: string, name: string, description: string, studentGroup: { __typename?: 'StudentGroup', id: string, name: string } }> } };
 
 
 export const LoginDocument = gql`
@@ -592,6 +617,26 @@ export const ListStudentGroupsDocument = gql`
   }
 }
     `;
+export const GetTeacherDocument = gql`
+    query getTeacher($id: String!) {
+  getTeacher(id: $id) {
+    id
+    firstName
+    lastName
+    email
+    fullName
+    courses {
+      id
+      name
+      description
+      studentGroup {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -623,6 +668,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     listStudentGroups(variables: ListStudentGroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListStudentGroupsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ListStudentGroupsQuery>(ListStudentGroupsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listStudentGroups', 'query');
+    },
+    getTeacher(variables: GetTeacherQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTeacherQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTeacherQuery>(GetTeacherDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTeacher', 'query');
     }
   };
 }

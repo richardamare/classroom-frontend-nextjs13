@@ -64,3 +64,22 @@ query listStudentGroups($input: ListStudentGroupInput!) {
         type
     }
 }
+
+query getTeacher($id: String!) {
+    getTeacher(id: $id) {
+        id
+        firstName
+        lastName
+        email
+        fullName
+        courses {
+            id
+            name
+            description
+            studentGroup {
+                id
+                name
+            }
+        }
+    }
+}
