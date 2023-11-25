@@ -190,6 +190,11 @@ export type ListStudentGroupInput = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
+export type ListTeacherInput = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -297,6 +302,8 @@ export type Query = {
   listSemesters: Array<Semester>;
   /** List all student groups */
   listStudentGroups: Array<StudentGroup>;
+  /** List all teachers */
+  listTeachers: Array<Teacher>;
   /** Get the student */
   student: Student;
 };
@@ -326,6 +333,11 @@ export type QueryListStudentGroupsArgs = {
   input: ListStudentGroupInput;
 };
 
+
+export type QueryListTeachersArgs = {
+  input: ListTeacherInput;
+};
+
 export type Semester = {
   __typename?: 'Semester';
   endDate: Scalars['DateTime']['output'];
@@ -340,6 +352,8 @@ export type Student = {
   courses: Array<Course>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
+  /** The full name of the user */
+  fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
@@ -392,6 +406,8 @@ export type Teacher = {
   __typename?: 'Teacher';
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
+  /** The full name of the user */
+  fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
@@ -401,6 +417,8 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
+  /** The full name of the user */
+  fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
@@ -437,7 +455,14 @@ export type ListCoursesQueryVariables = Exact<{
 }>;
 
 
-export type ListCoursesQuery = { __typename?: 'Query', listCourses: Array<{ __typename?: 'Course', id: string, name: string, description: string, studentGroup: { __typename?: 'StudentGroup', id: string, name: string }, teacher: { __typename?: 'Teacher', id: string } }> };
+export type ListCoursesQuery = { __typename?: 'Query', listCourses: Array<{ __typename?: 'Course', id: string, name: string, description: string, studentGroup: { __typename?: 'StudentGroup', id: string, name: string }, teacher: { __typename?: 'Teacher', id: string, fullName: string } }> };
+
+export type ListTeachersQueryVariables = Exact<{
+  input: ListTeacherInput;
+}>;
+
+
+export type ListTeachersQuery = { __typename?: 'Query', listTeachers: Array<{ __typename?: 'Teacher', id: string, firstName: string, lastName: string, email: string, fullName: string }> };
 
 
 export const LoginDocument = gql`
@@ -496,7 +521,19 @@ export const ListCoursesDocument = gql`
     }
     teacher {
       id
+      fullName
     }
+  }
+}
+    `;
+export const ListTeachersDocument = gql`
+    query listTeachers($input: ListTeacherInput!) {
+  listTeachers(input: $input) {
+    id
+    firstName
+    lastName
+    email
+    fullName
   }
 }
     `;
@@ -522,6 +559,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     listCourses(variables: ListCoursesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListCoursesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ListCoursesQuery>(ListCoursesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listCourses', 'query');
+    },
+    listTeachers(variables: ListTeachersQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListTeachersQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ListTeachersQuery>(ListTeachersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listTeachers', 'query');
     }
   };
 }

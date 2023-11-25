@@ -8,35 +8,35 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {MoreHorizontal} from "lucide-react";
-import {TeacherListDTO} from "@/lib/types";
+import {api} from "@/lib/api";
 
-interface Props {
-	teacher: TeacherListDTO
+interface TeacherTableActionsProps {
+	teacher: Awaited<ReturnType<typeof api.listTeachers>>["listTeachers"][number];
 }
 
-export default function TeacherTableActions({teacher}: Props) {
+export default function TeacherTableActions({teacher}: TeacherTableActionsProps) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="h-8 w-8 p-0">
-					<span className="sr-only">Open menu</span>
+					<span className="sr-only">Otevřít menu</span>
 					<MoreHorizontal className="h-4 w-4"/>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
-				<DropdownMenuLabel>Actions</DropdownMenuLabel>
+				<DropdownMenuLabel>Akce</DropdownMenuLabel>
 				<DropdownMenuSeparator/>
 				<DropdownMenuItem
 					onSelect={() => {
 					}}
 				>
-					View
+					Zobrazit
 				</DropdownMenuItem>
 				<DropdownMenuItem
 					onSelect={() => {
 					}}
 				>
-					Edit
+					Upravit
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

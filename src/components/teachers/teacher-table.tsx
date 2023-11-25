@@ -9,13 +9,29 @@ import {
 import {useState} from "react";
 import {flexRender, useReactTable} from "@tanstack/react-table";
 import {teacherTableColumns} from "@/components/teachers/teacher-table-columns";
+import {useQuery} from "react-query";
+import {useApi} from "@/hooks/use-api";
 
 export default function TeacherTable() {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+	const api = useApi();
+
+	const listTeacherQuery = useQuery({
+		queryKey: ['teachers'],
+		queryFn: async () => {
+			return await api.listTeachers({
+				input: {
+					limit: 100,
+					offset: 0
+				}
+			});
+		},
+	})
+
 	const table = useReactTable({
-		data: [],
+		data: listTeacherQuery.data?.listTeachers ?? [],
 		columns: teacherTableColumns,
 		getCoreRowModel: getCoreRowModel(),
 		onSortingChange: setSorting,
@@ -29,7 +45,15 @@ export default function TeacherTable() {
 	});
 
 	return <div className="space-y-4">
-		<div className="rounded-md border">
+		{/*<div className="px-3 py-5 flex justify-between items-center space-x-2">*/}
+		{/*	<Input*/}
+		{/*		placeholder="Vyhledat učitele (podle jména, emailu)"*/}
+		{/*	/>*/}
+		{/*	<Button>*/}
+		{/*		Hledat*/}
+		{/*	</Button>*/}
+		{/*</div>*/}
+		<div className="rounded-md">
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
