@@ -10,7 +10,7 @@ import {useState} from "react";
 import {flexRender, useReactTable} from "@tanstack/react-table";
 import {useQuery} from "react-query";
 import {useApi} from "@/hooks/use-api";
-import {useQueryParam} from "@/hooks/use-query-param";
+import {useGetQueryParam} from "@/hooks/use-query-param";
 import {courseTableColumns} from "@/components/courses/course-table-columns";
 
 export default function CourseTable() {
@@ -18,9 +18,10 @@ export default function CourseTable() {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const api = useApi();
-	const [semesterId, setSemesterId] = useQueryParam("semester", "")
+	const semesterId = useGetQueryParam("semester", "")
 
 	const listCourseQuery = useQuery({
+		enabled: semesterId.length > 0 && api.isAuthenticated,
 		queryKey: ['courses'],
 		queryFn: async () => {
 			if (!semesterId) throw new Error("Please, select a semester")
