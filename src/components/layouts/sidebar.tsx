@@ -4,6 +4,8 @@ import {cn} from "@/lib/utils";
 import {buttonVariants} from "@/components/ui/button";
 import {LogOut} from "lucide-react";
 import {sidebarItems} from "@/lib/config";
+import {SemesterPicker} from "@/components/semester-picker";
+import React from "react";
 
 interface SidebarProps {
 	className?: string;
@@ -23,14 +25,14 @@ export default function Sidebar({className}: SidebarProps) {
 				<div className="space-y-4 flex flex-col justify-between min-h-screen h-full">
 					<div className="py-2 space-y-6">
 						<div className="flex items-center justify-center h-20">
-							<h1>LOGO</h1>
+							<SemesterPicker className="mx-5"/>
 						</div>
 						<div className="mt-20">
 							{sidebarItems.office.map((item) => (
 								<>
 									<Link href={item.href}
 									      className={cn(
-										      "flex items-center gap-x-2 text-muted-foreground text-sm font-[500] pl-6 hover:text-secondary-foreground hover:bg-slate-300/20 w-full",
+										      "flex items-center gap-x-2 text-muted-foreground text-sm font-[500] pl-6 hover:text-blue-200 hover:bg-blue-100/70 hover:dark:bg-blue-500/10 w-full",
 										      isActive(item.href) && "text-blue-500 bg-blue-100/80 dark:bg-blue-500/20 dark:text-blue-500"
 									      )}>
 										<div className="flex items-center gap-x-2 py-4">

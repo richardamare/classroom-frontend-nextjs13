@@ -1,59 +1,15 @@
-import {CourseListDTO} from "@/lib/types";
+import {ClientError, GraphQLClient} from "graphql-request";
+import {getSdk} from "@/generated/graphql";
+import {env} from "@/env.mjs";
 
-export class Api {
+const gqlClient = new GraphQLClient(`${env.NEXT_PUBLIC_API_URL}/graphql`, {});
+export const api = getSdk(gqlClient);
 
-	public async listCourses(): Promise<CourseListDTO[]> {
-		return await this.get<CourseListDTO[]>("/api/v1/courses")
+export function getErrorMessage(e: any) {
+	const err = e as ClientError;
+	const message = err.response?.errors?.map((e) => e.message).join(", ");
+	if (message) {
+		return message;
 	}
-
-	private getToken(): string {
-		return localStorage.getItem("token") ?? ""
-	}
-
-	private async get<T>(path: string): Promise<T> {
-		const response = await fetch(path, {
-			method: "GET",
-			mode: "cors",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${this.getToken()}`
-			}
-		})
-		return await response.json()
-	}
-
-	private async post<T>(path: string, body: any): Promise<T> {
-		const response = await fetch(path, {
-			method: "POST",
-			body: JSON.stringify(body),
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${this.getToken()}`
-			},
-		})
-		return await response.json()
-	}
-
-	private async put<T>(path: string, body: any): Promise<T> {
-		const response = await fetch(path, {
-			method: "PUT",
-			body: JSON.stringify(body),
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${this.getToken()}`,
-			},
-		})
-		return await response.json()
-	}
-
-	private async delete<T>(path: string): Promise<T> {
-		const response = await fetch(path, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${this.getToken()}`,
-			}
-		})
-		return await response.json()
-	}
+	return "Something went wrong";
 }

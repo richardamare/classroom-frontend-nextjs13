@@ -13,7 +13,9 @@ export default function DashboardLayout({children}: DashboardLayoutProps) {
 				<Sidebar className="hidden lg:grid lg:col-span-1"/>
 				<div
 					className="border-l min-h-screen max-h-screen overflow-hidden lg:col-span-4 flex flex-col justify-between">
-					<div className="px-8 pt-10">{children}</div>
+					<div className="px-8 pt-10">
+						{children}
+					</div>
 					<div className="border-t w-full pb-4 pt-2">
 						<Footer/>
 					</div>

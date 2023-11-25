@@ -1,0 +1,33 @@
+query currentUser {
+    currentUser {
+        id
+        email
+        firstName
+        lastName
+        role
+    }
+}
+
+query listSemesters($input: ListSemesterInput!) {
+    listSemesters(input: $input) {
+        id
+        name
+        startDate
+        endDate
+    }
+}
+
+query listCourses($input: ListCourseInput!) {
+    listCourses(input: $input) {
+        id
+        name
+        description
+        studentGroup {
+            id
+            name
+        }
+        teacher {
+            id
+        }
+    }
+}
