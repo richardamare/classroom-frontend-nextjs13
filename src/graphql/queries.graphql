@@ -42,3 +42,13 @@ query listTeachers($input: ListTeacherInput!) {
         fullName
     }
 }
+
+query listStudents($input: ListStudentInput!) {
+    listStudents(input: $input) {
+        id
+        firstName
+        lastName
+        email
+        fullName
+    }
+}

@@ -170,6 +170,7 @@ export type ListCourseGradeInput = {
 export type ListCourseInput = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
   semesterId: Scalars['String']['input'];
 };
 
@@ -177,22 +178,32 @@ export type ListGradeInput = {
   courseId?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
   semesterId: Scalars['String']['input'];
 };
 
 export type ListSemesterInput = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ListStudentGroupInput = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ListStudentInput = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ListTeacherInput = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type LoginInput = {
@@ -302,6 +313,8 @@ export type Query = {
   listSemesters: Array<Semester>;
   /** List all student groups */
   listStudentGroups: Array<StudentGroup>;
+  /** List all students */
+  listStudents: Array<Student>;
   /** List all teachers */
   listTeachers: Array<Teacher>;
   /** Get the student */
@@ -334,6 +347,11 @@ export type QueryListStudentGroupsArgs = {
 };
 
 
+export type QueryListStudentsArgs = {
+  input: ListStudentInput;
+};
+
+
 export type QueryListTeachersArgs = {
   input: ListTeacherInput;
 };
@@ -352,7 +370,6 @@ export type Student = {
   courses: Array<Course>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
-  /** The full name of the user */
   fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
@@ -406,7 +423,6 @@ export type Teacher = {
   __typename?: 'Teacher';
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
-  /** The full name of the user */
   fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
@@ -417,8 +433,6 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
-  /** The full name of the user */
-  fullName: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
@@ -463,6 +477,13 @@ export type ListTeachersQueryVariables = Exact<{
 
 
 export type ListTeachersQuery = { __typename?: 'Query', listTeachers: Array<{ __typename?: 'Teacher', id: string, firstName: string, lastName: string, email: string, fullName: string }> };
+
+export type ListStudentsQueryVariables = Exact<{
+  input: ListStudentInput;
+}>;
+
+
+export type ListStudentsQuery = { __typename?: 'Query', listStudents: Array<{ __typename?: 'Student', id: string, firstName: string, lastName: string, email: string, fullName: string }> };
 
 
 export const LoginDocument = gql`
@@ -537,6 +558,17 @@ export const ListTeachersDocument = gql`
   }
 }
     `;
+export const ListStudentsDocument = gql`
+    query listStudents($input: ListStudentInput!) {
+  listStudents(input: $input) {
+    id
+    firstName
+    lastName
+    email
+    fullName
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -562,6 +594,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     listTeachers(variables: ListTeachersQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListTeachersQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ListTeachersQuery>(ListTeachersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listTeachers', 'query');
+    },
+    listStudents(variables: ListStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListStudentsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ListStudentsQuery>(ListStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listStudents', 'query');
     }
   };
 }
