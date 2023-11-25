@@ -18,8 +18,8 @@ const coursesItem = {
 	icon: BookOpen,
 }
 
-const classesItem = {
-	label: "Třídy/Skupiny",
+const groupsItem = {
+	label: "Skupiny",
 	href: "/dashboard/groups",
 	icon: ClipboardList,
 }
@@ -39,13 +39,13 @@ export const sidebarItems = {
 			href: "/dashboard/teachers",
 			icon: Presentation,
 		},
-		classesItem,
+		groupsItem,
 		coursesItem,
 	],
 	teacher: [
 		dashboardItem,
 		studentsItem,
-		classesItem,
+		groupsItem,
 		coursesItem,
 		gradesItem,
 	],
