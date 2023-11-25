@@ -172,6 +172,8 @@ export type ListCourseInput = {
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   semesterId: Scalars['String']['input'];
+  studentGroupId?: InputMaybe<Scalars['String']['input']>;
+  teacherId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ListGradeInput = {
@@ -192,6 +194,7 @@ export type ListStudentGroupInput = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
+  semesterId: Scalars['String']['input'];
 };
 
 export type ListStudentInput = {
@@ -485,6 +488,13 @@ export type ListStudentsQueryVariables = Exact<{
 
 export type ListStudentsQuery = { __typename?: 'Query', listStudents: Array<{ __typename?: 'Student', id: string, firstName: string, lastName: string, email: string, fullName: string }> };
 
+export type ListStudentGroupsQueryVariables = Exact<{
+  input: ListStudentGroupInput;
+}>;
+
+
+export type ListStudentGroupsQuery = { __typename?: 'Query', listStudentGroups: Array<{ __typename?: 'StudentGroup', id: string, name: string, type: StudentGroupType, teacher?: { __typename?: 'Teacher', id: string, fullName: string } | null }> };
+
 
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
@@ -569,6 +579,19 @@ export const ListStudentsDocument = gql`
   }
 }
     `;
+export const ListStudentGroupsDocument = gql`
+    query listStudentGroups($input: ListStudentGroupInput!) {
+  listStudentGroups(input: $input) {
+    id
+    name
+    teacher {
+      id
+      fullName
+    }
+    type
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -597,6 +620,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     listStudents(variables: ListStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ListStudentsQuery>(ListStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listStudents', 'query');
+    },
+    listStudentGroups(variables: ListStudentGroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListStudentGroupsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ListStudentGroupsQuery>(ListStudentGroupsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listStudentGroups', 'query');
     }
   };
 }

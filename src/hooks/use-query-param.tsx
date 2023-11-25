@@ -60,3 +60,23 @@ export function useQueryParam<T>(paramName: string, defaultValue: T) {
 
 	return [paramValue, setParamValue] as const;
 }
+
+export function useGetQueryParam<T>(name: string, defaultValue: T) {
+	const router = useRouter();
+	return router.query[name] as T | null || defaultValue;
+}
+
+export function useSetQueryParam<T>(name: string) {
+	const router = useRouter();
+	return (value: T | null) => {
+		if (value === null) {
+			delete router.query[name];
+		} else {
+			router.query[name] = value as unknown as string;
+		}
+		router.replace({
+			pathname: router.pathname,
+			query: router.query,
+		}, undefined, {shallow: true});
+	};
+}

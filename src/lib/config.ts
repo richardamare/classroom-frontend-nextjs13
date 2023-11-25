@@ -20,7 +20,7 @@ const coursesItem = {
 
 const classesItem = {
 	label: "Třídy/Skupiny",
-	href: "/dashboard/classes",
+	href: "/dashboard/groups",
 	icon: ClipboardList,
 }
 

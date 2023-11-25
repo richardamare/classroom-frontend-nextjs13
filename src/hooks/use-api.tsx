@@ -4,9 +4,12 @@ import {useSession} from "next-auth/react";
 import {useMemo} from "react";
 import {getSdk} from "@/generated/graphql";
 import {QueryClient} from "react-query";
+import {getErrorMessage} from "@/lib/api";
+import {useToast} from "@/hooks/use-toast";
 
 export function useApi() {
 	const session = useSession();
+	const toast = useToast();
 
 	return useMemo(() => {
 		const gqlClient = new GraphQLClient(`${env.NEXT_PUBLIC_API_URL}/graphql`, {
@@ -19,9 +22,14 @@ export function useApi() {
 			defaultOptions: {
 				queries: {
 					enabled: session.status === "authenticated",
+					retry: false,
 					refetchOnMount: false,
 					refetchOnWindowFocus: false,
 					refetchOnReconnect: false,
+					onError: (error) => {
+						const message = getErrorMessage(error)
+						toast.error(message)
+					}
 				},
 			},
 		});

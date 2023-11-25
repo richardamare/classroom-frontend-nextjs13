@@ -52,3 +52,15 @@ query listStudents($input: ListStudentInput!) {
         fullName
     }
 }
+
+query listStudentGroups($input: ListStudentGroupInput!) {
+    listStudentGroups(input: $input) {
+        id
+        name
+        teacher {
+            id
+            fullName
+        }
+        type
+    }
+}
