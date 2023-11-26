@@ -112,3 +112,19 @@ query getStudentGroup($id: String!) {
         }
     }
 }
+
+query getCourse($id: String!) {
+    getCourse(id: $id) {
+        id
+        name
+        description
+        studentGroup {
+            id
+            name
+        }
+        teacher {
+            id
+            fullName
+        }
+    }
+}

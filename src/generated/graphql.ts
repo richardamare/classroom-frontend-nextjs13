@@ -159,8 +159,19 @@ export type Grade = {
   courseId: Scalars['String']['output'];
   id: Scalars['String']['output'];
   semesterId: Scalars['String']['output'];
-  students: Array<StudentGrade>;
+  students: Array<GradeStudent>;
   title: Scalars['String']['output'];
+};
+
+export type GradeStudent = {
+  __typename?: 'GradeStudent';
+  basePoints: Scalars['Float']['output'];
+  formattedPoints: Scalars['String']['output'];
+  notClassified: Scalars['Boolean']['output'];
+  notPresent: Scalars['Boolean']['output'];
+  note: Scalars['String']['output'];
+  points: Scalars['Float']['output'];
+  studentId: Scalars['String']['output'];
 };
 
 export type ListCourseGradeInput = {
@@ -245,6 +256,10 @@ export type Mutation = {
   createTeacher: CreateUserResult;
   /** Login with email and password */
   login: LoginResult;
+  /** Remove a student from a student group */
+  removeStudent: RemoveStudentResult;
+  /** Update a semester */
+  updateSemester: UpdateSemesterResult;
 };
 
 
@@ -302,12 +317,37 @@ export type MutationLoginArgs = {
   input: LoginInput;
 };
 
+
+export type MutationRemoveStudentArgs = {
+  input: RemoveStudentInput;
+};
+
+
+export type MutationUpdateSemesterArgs = {
+  input: UpdateSemesterInput;
+};
+
+export type Parent = {
+  __typename?: 'Parent';
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  role: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Get the current student */
   currentStudent: Student;
   /** Get the current user */
   currentUser: User;
+  /** Get a course by id */
+  getCourse: Course;
+  /** Get the parent by id */
+  getParent: Parent;
+  /** Get a semester by id */
+  getSemester: Semester;
   /** Get the student by id */
   getStudent: Student;
   /** Get a student group by id */
@@ -328,6 +368,21 @@ export type Query = {
   listStudents: Array<Student>;
   /** List all teachers */
   listTeachers: Array<Teacher>;
+};
+
+
+export type QueryGetCourseArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetParentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetSemesterArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -380,6 +435,16 @@ export type QueryListTeachersArgs = {
   input: ListTeacherInput;
 };
 
+export type RemoveStudentInput = {
+  studentGroupId: Scalars['String']['input'];
+  studentId: Scalars['String']['input'];
+};
+
+export type RemoveStudentResult = {
+  __typename?: 'RemoveStudentResult';
+  message: Scalars['String']['output'];
+};
+
 export type Semester = {
   __typename?: 'Semester';
   endDate: Scalars['DateTime']['output'];
@@ -395,23 +460,11 @@ export type Student = {
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   fullName: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
   /** The student groups of the student */
   studentGroups: Array<StudentGroup>;
-};
-
-export type StudentGrade = {
-  __typename?: 'StudentGrade';
-  basePoints: Scalars['Float']['output'];
-  /** Formatted points */
-  formattedPoints: Scalars['String']['output'];
-  notClassified: Scalars['Boolean']['output'];
-  notPresent: Scalars['Boolean']['output'];
-  note: Scalars['String']['output'];
-  points: Scalars['Float']['output'];
-  studentId: Scalars['String']['output'];
 };
 
 export type StudentGradeInput = {
@@ -424,7 +477,7 @@ export type StudentGradeInput = {
 
 export type StudentGroup = {
   __typename?: 'StudentGroup';
-  id: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   /** Semester of the student group */
   semester: Semester;
@@ -450,18 +503,31 @@ export type Teacher = {
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   fullName: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
   /** The student classes where the teacher is class teacher */
   studentGroups: Array<StudentGroup>;
 };
 
+export type UpdateSemesterInput = {
+  endDate: Scalars['DateTime']['input'];
+  id: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type UpdateSemesterResult = {
+  __typename?: 'UpdateSemesterResult';
+  id: Scalars['String']['output'];
+  message: Scalars['String']['output'];
+};
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   role: Scalars['String']['output'];
 };
@@ -540,6 +606,13 @@ export type GetStudentGroupQueryVariables = Exact<{
 
 
 export type GetStudentGroupQuery = { __typename?: 'Query', getStudentGroup: { __typename?: 'StudentGroup', id: string, name: string, type: StudentGroupType, teacher?: { __typename?: 'Teacher', id: string, fullName: string } | null, students: Array<{ __typename?: 'Student', id: string, firstName: string, lastName: string, email: string, fullName: string }> } };
+
+export type GetCourseQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCourseQuery = { __typename?: 'Query', getCourse: { __typename?: 'Course', id: string, name: string, description: string, studentGroup: { __typename?: 'StudentGroup', id: string, name: string }, teacher: { __typename?: 'Teacher', id: string, fullName: string } } };
 
 
 export const LoginDocument = gql`
@@ -689,6 +762,23 @@ export const GetStudentGroupDocument = gql`
   }
 }
     `;
+export const GetCourseDocument = gql`
+    query getCourse($id: String!) {
+  getCourse(id: $id) {
+    id
+    name
+    description
+    studentGroup {
+      id
+      name
+    }
+    teacher {
+      id
+      fullName
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -729,6 +819,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     getStudentGroup(variables: GetStudentGroupQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetStudentGroupQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetStudentGroupQuery>(GetStudentGroupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getStudentGroup', 'query');
+    },
+    getCourse(variables: GetCourseQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetCourseQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCourseQuery>(GetCourseDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCourse', 'query');
     }
   };
 }
