@@ -128,3 +128,23 @@ query getCourse($id: String!) {
         }
     }
 }
+
+query listCourseGrades($input: ListCourseGradeInput!) {
+    listCourseGrades(input: $input) {
+        course {
+            id
+            name
+            teacher {
+                id
+                fullName
+            }
+            studentGroup {
+                id
+                name
+            }
+        }
+        points
+        basePoints
+        finalGrade
+    }
+}
