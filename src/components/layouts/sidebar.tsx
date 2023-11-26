@@ -5,7 +5,8 @@ import {buttonVariants} from "@/components/ui/button";
 import {LogOut} from "lucide-react";
 import {sidebarItems} from "@/lib/config";
 import {SemesterPicker} from "@/components/semester-picker";
-import React from "react";
+import React, {useMemo} from "react";
+import {useSession} from "next-auth/react";
 
 interface SidebarProps {
 	className?: string;
@@ -14,10 +15,24 @@ interface SidebarProps {
 export default function Sidebar({className}: SidebarProps) {
 
 	const router = useRouter();
+	const session = useSession();
 
 	function isActive(path: string) {
 		return router.pathname === path
 	}
+
+	const user = session.data?.user;
+
+	const currentSidebarItems = useMemo(() => {
+		if (!user) return [];
+
+		const role = (user.role.toLowerCase() ?? "office") as keyof typeof sidebarItems;
+
+		return sidebarItems[role].map((item) => ({
+			...item,
+			href: item.href.replace("[id]", user.id)
+		}))
+	}, [user])
 
 	return (
 		<>
@@ -28,7 +43,7 @@ export default function Sidebar({className}: SidebarProps) {
 							<SemesterPicker className="mx-5"/>
 						</div>
 						<div className="mt-20">
-							{sidebarItems.office.map((item) => (
+							{currentSidebarItems.map((item) => (
 								<>
 									<Link
 										key={item.href}
