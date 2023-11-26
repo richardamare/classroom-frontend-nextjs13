@@ -30,11 +30,13 @@ export default function Sidebar({className}: SidebarProps) {
 						<div className="mt-20">
 							{sidebarItems.office.map((item) => (
 								<>
-									<Link href={item.href}
-									      className={cn(
-										      "flex items-center gap-x-2 text-muted-foreground text-sm font-[500] pl-6 hover:text-blue-200 hover:bg-blue-100/70 hover:dark:bg-blue-500/10 w-full",
-										      isActive(item.href) && "text-blue-500 bg-blue-100/80 dark:bg-blue-500/20 dark:text-blue-500"
-									      )}>
+									<Link
+										key={item.href}
+										href={item.href}
+										className={cn(
+											"flex items-center gap-x-2 text-muted-foreground text-sm font-[500] pl-6 hover:text-blue-200 hover:bg-blue-100/70 hover:dark:bg-blue-500/10 w-full",
+											isActive(item.href) && "text-blue-500 bg-blue-100/80 dark:bg-blue-500/20 dark:text-blue-500"
+										)}>
 										<div className="flex items-center gap-x-2 py-4">
 											<item.icon className="w-5 h-5 mr-2"/>
 											<span>{item.label}</span>
