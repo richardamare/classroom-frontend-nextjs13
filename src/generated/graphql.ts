@@ -623,6 +623,13 @@ export type ListCourseGradesQueryVariables = Exact<{
 
 export type ListCourseGradesQuery = { __typename?: 'Query', listCourseGrades: Array<{ __typename?: 'CourseGrade', points: number, basePoints: number, finalGrade: number, course: { __typename?: 'Course', id: string, name: string, teacher: { __typename?: 'Teacher', id: string, fullName: string }, studentGroup: { __typename?: 'StudentGroup', id: string, name: string } } }> };
 
+export type GetCourseAsTeacherQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCourseAsTeacherQuery = { __typename?: 'Query', getCourse: { __typename?: 'Course', id: string, name: string, description: string, studentGroup: { __typename?: 'StudentGroup', id: string, name: string, students: Array<{ __typename?: 'Student', id: string, fullName: string }> }, teacher: { __typename?: 'Teacher', id: string, fullName: string } } };
+
 
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
@@ -809,6 +816,27 @@ export const ListCourseGradesDocument = gql`
   }
 }
     `;
+export const GetCourseAsTeacherDocument = gql`
+    query getCourseAsTeacher($id: String!) {
+  getCourse(id: $id) {
+    id
+    name
+    description
+    studentGroup {
+      id
+      name
+      students {
+        id
+        fullName
+      }
+    }
+    teacher {
+      id
+      fullName
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -855,6 +883,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     listCourseGrades(variables: ListCourseGradesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ListCourseGradesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ListCourseGradesQuery>(ListCourseGradesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'listCourseGrades', 'query');
+    },
+    getCourseAsTeacher(variables: GetCourseAsTeacherQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetCourseAsTeacherQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCourseAsTeacherQuery>(GetCourseAsTeacherDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCourseAsTeacher', 'query');
     }
   };
 }

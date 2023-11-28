@@ -1,8 +1,12 @@
 import DashboardLayout from "@/components/layouts/dashboard-layout";
+import {useRouter} from "next/router";
 import {Card} from "@/components/ui/card";
 import CourseGradeTable from "@/components/grades/course-grade-table";
 
 export default function Page() {
+	const router = useRouter();
+	const courseId = router.query.id as string;
+
 	return <DashboardLayout>
 		<div className="space-y-4">
 			<div className="flex justify-between items-center">
@@ -14,7 +18,7 @@ export default function Page() {
 				</div>
 			</div>
 			<Card>
-				<CourseGradeTable/>
+				<CourseGradeTable courseId={courseId}/>
 			</Card>
 		</div>
 	</DashboardLayout>

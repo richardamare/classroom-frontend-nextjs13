@@ -148,3 +148,23 @@ query listCourseGrades($input: ListCourseGradeInput!) {
         finalGrade
     }
 }
+
+query getCourseAsTeacher($id: String!) {
+    getCourse(id: $id) {
+        id
+        name
+        description
+        studentGroup {
+            id
+            name
+            students {
+                id
+                fullName
+            }
+        }
+        teacher {
+            id
+            fullName
+        }
+    }
+}

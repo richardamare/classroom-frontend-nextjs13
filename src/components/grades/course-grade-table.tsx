@@ -13,7 +13,11 @@ import {useApi} from "@/hooks/use-api";
 import {useGetQueryParam} from "@/hooks/use-query-param";
 import {courseGradeTableColumns} from "@/components/grades/course-grade-table-columns";
 
-export default function CourseGradeTable() {
+interface CourseGradeTableProps {
+	courseId: string;
+}
+
+export default function CourseGradeTable({courseId}: CourseGradeTableProps) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
