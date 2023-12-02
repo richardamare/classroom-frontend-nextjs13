@@ -10,28 +10,24 @@ import {useState} from "react";
 import {flexRender, useReactTable} from "@tanstack/react-table";
 import {useQuery} from "react-query";
 import {useApi} from "@/hooks/use-api";
-import {useGetQueryParam} from "@/hooks/use-query-param";
 import {courseGradeTableColumns} from "@/components/grades/course-grade-table-columns";
+import {useSemesterState} from "@/hooks/state";
 
-interface CourseGradeTableProps {
-	courseId: string;
-}
-
-export default function CourseGradeTable({courseId}: CourseGradeTableProps) {
+export default function CourseGradeTable() {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const api = useApi();
-	const semesterId = useGetQueryParam("semester", "")
+	const semester = useSemesterState((state) => state.semester);
 
 	const listCourseGradesQuery = useQuery({
-		enabled: semesterId.length > 0 && api.isAuthenticated,
+		enabled: (semester?.length ?? 0) > 0 && api.isAuthenticated,
 		queryKey: ['courseGrades'],
 		queryFn: async () => {
-			if (!semesterId) throw new Error("Please, select a semester")
+			if (!semester) throw new Error("Please, select a semester")
 			return await api.listCourseGrades({
 				input: {
-					semesterId
+					semesterId: semester
 				}
 			});
 		},

@@ -47,7 +47,6 @@ export const sidebarItems = {
 		studentsItem,
 		groupsItem,
 		coursesItem,
-		gradesItem,
 	],
 	student: [
 		dashboardItem,

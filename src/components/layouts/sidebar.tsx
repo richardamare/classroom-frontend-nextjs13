@@ -7,18 +7,18 @@ import {sidebarItems} from "@/lib/config";
 import {SemesterPicker} from "@/components/semester-picker";
 import React, {useMemo} from "react";
 import {useSession} from "next-auth/react";
+import {Card} from "@/components/ui/card";
 
 interface SidebarProps {
 	className?: string;
 }
 
 export default function Sidebar({className}: SidebarProps) {
-
 	const router = useRouter();
 	const session = useSession();
 
 	function isActive(path: string) {
-		return router.pathname === path
+		return router.pathname === path;
 	}
 
 	const user = session.data?.user;
@@ -26,21 +26,32 @@ export default function Sidebar({className}: SidebarProps) {
 	const currentSidebarItems = useMemo(() => {
 		if (!user) return [];
 
-		const role = (user.role.toLowerCase() ?? "office") as keyof typeof sidebarItems;
+		const role = (user.role.toLowerCase() ??
+			"office") as keyof typeof sidebarItems;
 
 		return sidebarItems[role].map((item) => ({
 			...item,
-			href: item.href.replace("[id]", user.id)
-		}))
-	}, [user])
+			href: item.href.replace("[id]", user.id),
+		}));
+	}, [user]);
 
 	return (
 		<>
 			<div className={className}>
 				<div className="space-y-4 flex flex-col justify-between min-h-screen h-full">
 					<div className="py-2 space-y-6">
-						<div className="flex items-center justify-center h-20">
-							<SemesterPicker className="mx-5"/>
+						<div className="space-y-3">
+							<Card className="flex flex-col items-start mx-4 mt-5 px-3 py-2">
+								<h1 className="text-base font-medium">
+									{user?.firstName} {user?.lastName}
+								</h1>
+								<span className="text-muted-foreground text-xs font-[500]">
+                                  {user?.role}
+                                </span>
+							</Card>
+							<div className="flex items-center justify-center">
+								<SemesterPicker className="mx-4"/>
+							</div>
 						</div>
 						<div className="mt-20">
 							{currentSidebarItems.map((item) => (
@@ -50,8 +61,10 @@ export default function Sidebar({className}: SidebarProps) {
 										href={item.href}
 										className={cn(
 											"flex items-center gap-x-2 text-muted-foreground text-sm font-[500] pl-6 hover:text-blue-200 hover:bg-blue-100/70 hover:dark:bg-blue-500/10 w-full",
-											isActive(item.href) && "text-blue-500 bg-blue-100/80 dark:bg-blue-500/20 dark:text-blue-500"
-										)}>
+											isActive(item.href) &&
+											"text-blue-500 bg-blue-100/80 dark:bg-blue-500/20 dark:text-blue-500"
+										)}
+									>
 										<div className="flex items-center gap-x-2 py-4">
 											<item.icon className="w-5 h-5 mr-2"/>
 											<span>{item.label}</span>

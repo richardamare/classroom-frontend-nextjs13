@@ -25,11 +25,9 @@ export const courseGradeTableColumns: ColumnDef<ColumnType>[] = [
 		id: "points",
 		accessorFn: (c) => c.points,
 		header: ({column}) => <TableColumnHeader column={column} title="Body"/>,
-	},
-	{
-		id: "basePoints",
-		accessorFn: (c) => c.basePoints,
-		header: ({column}) => <TableColumnHeader column={column} title="Základní body"/>,
+		cell: ({row}) => {
+			return <div>{row.original.points} / {row.original.basePoints}</div>;
+		}
 	},
 	{
 		id: "finalGrade",

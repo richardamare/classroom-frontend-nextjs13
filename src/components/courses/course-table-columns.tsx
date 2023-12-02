@@ -20,7 +20,7 @@ export const courseTableColumns: ColumnDef<ColumnType>[] = [
 	{
 		id: "studentGroup",
 		accessorFn: (c) => c.studentGroup.name,
-		header: ({column}) => <TableColumnHeader column={column} title="Třída/Skupina"/>,
+		header: ({column}) => <TableColumnHeader column={column} title="Skupina"/>,
 	},
 	{
 		id: "actions",
