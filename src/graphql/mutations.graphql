@@ -18,3 +18,10 @@ mutation createTeacher($input: CreateTeacherInput!) {
         message
     }
 }
+
+mutation createStudent($input: Create!) {
+    createStudent(input: $input) {
+        id
+        message
+    }
+}
